@@ -24,7 +24,8 @@ beforeAll(async () => {
     // Redis Setup
     redisContainer = new RedisServer();
     await redisContainer.open();
-    const redisUrl = `redis://localhost:${redisContainer.port}`;
+    // const redisUrl = `redis://localhost:${redisContainer.port}`;
+    const redisUrl = `redis://localhost:${8000}`;
     redisBackend = new RedisBackend(redisUrl);
 
     // S3 Setup

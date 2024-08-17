@@ -1,23 +1,25 @@
 import { RedisBackend } from '../redis_backend';
+import { GenericContainer, StartedTestContainer } from 'testcontainers';
 import RedisServer from 'redis-server';
 import { jest } from '@jest/globals';
 
-describe('TestRedisBackend', () => {
+describe('TestRedisBackend', async () => {
     let redisContainer: RedisServer;
     let backend: RedisBackend;
 
     beforeAll(async () => {
         redisContainer = new RedisServer();
-        await redisContainer.start();
+        await redisContainer.open();
 
         backend = new RedisBackend(
-            redisContainer.getConnectionString(),
+            // redisContainer.getConnectionString(),
+            "",
             false, // Disable notifications for testing
         );
     });
 
     afterAll(async () => {
-        await redisContainer.stop();
+        await redisContainer.close();
     });
 
     test('save_and_load_context', async () => {
