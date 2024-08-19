@@ -3,15 +3,15 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import RedisServer from 'redis-server';
 
 export class TestBase {
-    static mongodbContainer: MongoMemoryServer;
+    static mongodbContainer: MongoMemoryServer | any;
     static redisContainer: RedisServer;
     static minioContainer: StartedTestContainer;
 
     // Set up containers before running tests
     static async setUpClass() {
         // MongoDB setup
-        this.mongodbContainer = new MongoMemoryServer();
-        await this.mongodbContainer.start();
+        this.mongodbContainer = MongoMemoryServer.create();
+        // await this.mongodbContainer.start();
 
         // Redis setup
         this.redisContainer = new RedisServer();
@@ -30,7 +30,7 @@ export class TestBase {
     // Tear down containers after tests complete
     static async tearDownClass() {
         if (this.mongodbContainer) {
-            await this.mongodbContainer.stop();
+            // await this.mongodbContainer.stop();
         }
         if (this.redisContainer) {
             await this.redisContainer.close();

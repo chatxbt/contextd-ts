@@ -4,13 +4,13 @@ import { Contextd } from '../context';
 import { jest } from '@jest/globals';
 
 describe('TestContextd', () => {
-    let mongoServer: MongoMemoryServer;
+    let mongoServer: MongoMemoryServer | any;
     let storageBackend: jest.Mocked<MongoDBBackend>;
     let contextKey: string;
     let contextd: Contextd;
 
     beforeAll(async () => {
-        mongoServer = new MongoMemoryServer();
+        mongoServer = await MongoMemoryServer.create();
         const mongoUri = await mongoServer.getUri();
         storageBackend = {
             loadContext: jest.fn(),

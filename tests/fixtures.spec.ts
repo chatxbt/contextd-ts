@@ -11,13 +11,13 @@ let redisContainer: RedisServer;
 let s3Container: GenericContainer | any;
 
 // Fixtures
-let mongodbBackend: MongoDBBackend;
+let mongodbBackend: MongoDBBackend | any;
 let redisBackend: RedisBackend;
 let s3Backend: S3Backend;
 
 beforeAll(async () => {
     // MongoDB Setup
-    mongodbContainer = new MongoMemoryServer();
+    mongodbContainer = await MongoMemoryServer.create();
     const mongoUri = await mongodbContainer.getUri();
     mongodbBackend = new MongoDBBackend(mongoUri, 'test_db');
 
@@ -51,9 +51,9 @@ beforeAll(async () => {
 
 afterAll(async () => {
     // Stop all containers
-    await mongodbContainer.stop();
-    await redisContainer.close();
-    await s3Container.stop();
+    // await mongodbContainer.stop();
+    // await redisContainer.close();
+    // await s3Container.stop();
 });
 
 describe('Test Backend Connections', () => {

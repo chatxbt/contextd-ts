@@ -6,7 +6,7 @@
 // import { jest } from '@jest/globals';
 
 // describe('TestMongoDBBackend', () => {
-//     let mongodbBackend: MongoDBBackend;
+//     let mongodbBackend: MongoDBBackend | any;
 
 //     beforeAll(async () => {
 //         await TestBase.setUpClass();

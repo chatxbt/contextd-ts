@@ -54,7 +54,7 @@ export class S3Backend implements StorageBackend {
       const response = await this.s3.send(command);
       const body = await streamToString(response.Body as ReadableStream);
       return JSON.parse(body);
-    } catch (error) {
+    } catch (error: any) {
       if (error.name === 'NoSuchKey') {
         return {};
       }
@@ -100,7 +100,7 @@ export class S3Backend implements StorageBackend {
     try {
       await this.s3.send(command);
       return true;
-    } catch (error) {
+    } catch (error: any) {
       if (error.name === 'ConditionalCheckFailedException') {
         return false;
       }
@@ -118,7 +118,7 @@ export class S3Backend implements StorageBackend {
         const deleteCommand = new DeleteObjectCommand({ Bucket: this.bucketName, Key: key });
         await this.s3.send(deleteCommand);
       }
-    } catch (error) {
+    } catch (error: any) {
       if (error.name !== 'NoSuchKey') {
         throw error;
       }

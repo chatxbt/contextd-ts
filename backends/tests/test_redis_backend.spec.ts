@@ -1,9 +1,8 @@
 import { RedisBackend } from '../redis_backend';
 import { GenericContainer, StartedTestContainer } from 'testcontainers';
 import RedisServer from 'redis-server';
-import { jest } from '@jest/globals';
 
-describe('TestRedisBackend', async () => {
+describe('TestRedisBackend', () => {
     let redisContainer: RedisServer;
     let backend: RedisBackend;
 
