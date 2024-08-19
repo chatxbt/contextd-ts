@@ -1,8 +1,6 @@
-Sure, here's the example written as a GitHub Markdown document or blog post:
-
 # Using contextd with Redis
 
-[contextd](https://github.com/contextualized/contextd) is a Python library for managing context data in applications. It provides a simple and flexible way to store and retrieve context-specific data, such as user preferences, session information, or application state.
+[`contextd`](https://github.com/contextualized/contextd-ts) is a TypeScript library for managing context data in applications. It provides a simple and flexible way to store and retrieve context-specific data, such as user preferences, session information, or application state.
 
 In this example, we'll demonstrate how to use `contextd` with Redis as the backend store for storing and retrieving context data.
 
@@ -11,29 +9,47 @@ In this example, we'll demonstrate how to use `contextd` with Redis as the backe
 Before running this example, make sure you have the following:
 
 - A Redis server running (either locally or on a remote server)
-- The Redis Python client library installed (`pip install redis`)
+- The Redis TypeScript client library installed:
+
+```bash
+npm install ioredis
+```
+
 
 ## Example Code
 
-```python
-import contextd
-from redis import Redis
+```typescript
+import { Contextd } from 'contextd';
+import Redis from 'ioredis';
 
-# Connect to Redis
-redis_client = Redis(host='localhost', port=6379, db=0)
+// Connect to Redis
+const redisClient = new Redis({
+  host: 'localhost',
+  port: 6379,
+  db: 0,
+});
 
-# Create a context manager with Redis as the backend store
-context_manager = contextd.ContextManager(backend='redis', backend_options={'client': redis_client})
+// Create a context manager with Redis as the backend store
+const contextManager = new Contextd({
+  backend: 'redis',
+  backendOptions: { client: redisClient },
+});
 
-# Use the context manager as you would normally
-with context_manager.start_context('my_context') as ctx:
-    ctx.set('key1', 'value1')
-    ctx.set('key2', 'value2')
+// Use the context manager as you would normally
+(async () => {
+  const ctx = await contextManager.startContext('my_context');
 
-    # Retrieve values from the context
-    value1 = ctx.get('key1')
-    value2 = ctx.get('key2')
-    print(f'Value1: {value1}, Value2: {value2}')
+  await ctx.set('key1', 'value1');
+  await ctx.set('key2', 'value2');
+
+  // Retrieve values from the context
+  const value1 = await ctx.get('key1');
+  const value2 = await ctx.get('key2');
+  console.log(`Value1: ${value1}, Value2: ${value2}`);
+
+  // The context data is now stored in Redis
+})();
+
 
 # The context data is now stored in Redis
 ```
@@ -50,7 +66,7 @@ with context_manager.start_context('my_context') as ctx:
 
 ## Usage
 
-To run this example, make sure you have a Redis server running and the `redis` Python library installed. You can install it using `pip install redis`.
+To run this example, ensure you have a Redis server running and the ioredis TypeScript library installed. You can install it using: npm install ioredis
 
 Update the Redis connection details (host, port, etc.) in the code to match your Redis server configuration.
 

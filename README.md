@@ -45,8 +45,8 @@ const context = new Contextd({
 
 Before using the context, you must initialize it, which establishes the Redis connection, loads the initial context, and starts listening for updates.
 
-```python
-await context.initialize()
+```typescript
+await context.initialize();
 ```
 
 ## Usage
@@ -55,28 +55,29 @@ await context.initialize()
 
 You can update individual keys in the context using the update_context method. This method automatically handles acquiring and releasing a distributed lock for the specific key.
 
-```python
-await context.update_context("user", {"name": "John Doe", "email": "john@example.com"})
+```typescript
+await context.updateContext("user", { name: "John Doe", email: "john@example.com" });
 ```
 
 ### Transactional Updates
 
 For updating multiple keys in a single atomic operation, use the transactional_update method. This ensures that all updates are applied together under the protection of a lock.
 
-```python
-await context.transactional_update({
-    "user": {"name": "Jane Doe", "email": "jane@example.com"},
-    "logged_in": True
-})
+```typescript
+await context.transactionalUpdate({
+  user: { name: "Jane Doe", email: "jane@example.com" },
+  loggedIn: true
+});
+
 ```
 
 ### Retrieving the Context
 
 To retrieve the current context, use the get_context method:
 
-```python
-current_context = context.get_context()
-print(current_context)
+```typescript
+const currentContext = await context.getContext();
+console.log(currentContext);
 ```
 
 ### Listening for Updates
@@ -87,30 +88,27 @@ Contextd automatically listens for updates from other instances. When an update 
 
 Here’s a full example demonstrating how to use Contextd:
 
-```python
-import asyncio
-from contextd import Contextd
+```typescript
+import { Contextd } from 'contextd';
 
-async def main():
-    # Create and initialize the context
-    cxtd = Contextd(context_key="my_cxtd")
-    await cxtd.initialize()
+(async () => {
+  // Create and initialize the context
+  const cxtd = new Contextd({ contextKey: "my_cxtd" });
+  await cxtd.initialize();
 
-    # Update context
-    await cxtd.update_context("user", {"name": "John Doe", "email": "john@example.com"})
+  // Update context
+  await cxtd.updateContext("user", { name: "John Doe", email: "john@example.com" });
 
-    # Perform transactional updates
-    await cxtd.transactional_update({
-        "user": {"name": "Jane Doe", "email": "jane@example.com"},
-        "logged_in": True
-    })
+  // Perform transactional updates
+  await cxtd.transactionalUpdate({
+    user: { name: "Jane Doe", email: "jane@example.com" },
+    loggedIn: true
+  });
 
-    # Retrieve current context
-    current_context = cxtd.get_context()
-    print(f"Current Context: {current_context}")
-
-if __name__ == "__main__":
-    asyncio.run(main())
+  // Retrieve current context
+  const currentContext = await cxtd.getContext();
+  console.log(`Current Context: ${currentContext}`);
+})();
 ```
 
 ## Advanced Configuration
@@ -119,26 +117,27 @@ if __name__ == "__main__":
 
 By default, the class connects to Redis using localhost on port 6379 with database 0. You can customize these settings through the constructor:
 
-```python
-cxtd = Contextd(
-    context_key="my_cxtd",
-    redis_host='my-redis-server',
-    redis_port=6380,
-    redis_db=1
-)
+```typescript
+const cxtd = new Contextd({
+  contextKey: "my_cxtd",
+  redisHost: 'my-redis-server',
+  redisPort: 6380,
+  redisDb: 1
+});
 ```
 
 ### Locking and Retry Mechanism
 
 The acquire_lock method allows for setting a custom lock timeout, retry delay, and maximum number of retries:
 
-```python
-lock_acquired = await context.acquire_lock(
-    key="user", 
-    lock_timeout=15000,  # 15 seconds
-    retry_delay=0.2,     # 200 ms
-    max_retries=100      # Retry up to 100 times
-)
+```typescript
+const lockAcquired = await context.acquireLock({
+  key: "user",
+  lockTimeout: 15000,  // 15 seconds
+  retryDelay: 200,     // 200 ms
+  maxRetries: 100      // Retry up to 100 times
+});
+
 ```
 
 ## Best Practices
